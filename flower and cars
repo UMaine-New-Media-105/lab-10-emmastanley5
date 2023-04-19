@@ -1,0 +1,83 @@
+// Emma Stanley Lab Flower and car 
+flowerX = 250;
+ flowerY = 300;
+ flowerWidth = 50;
+ let drawCar = [];
+ let colors = ["coral","pink","aqua","yellow"];
+ let lanes = [30,100,300];
+ function setup() {
+    createCanvas(400, 400);
+    for (let i = 0; i < 10; i++) {
+     let thisX = random(width);
+     let thisLane = random(lanes);
+     let thisColor = random(colors);
+      drawCar[i] = new Car(thisX, thisLane,thisColor);
+    }
+ }
+
+ function draw() {
+   background("black");
+   fill("gray");
+   rect(0,350,400,50);
+   rect(0,200,400,50);
+   for (let i = 0; i < drawCar.length; i++) {
+     drawCar[i].move();
+     drawCar[i].show();
+       if (drawCar[i].collision(flowerX, flowerY)){
+         flowerX = 250
+         flowerY= 350
+       }
+   }
+   addFlower(flowerX, flowerY, 1);
+ }
+ class Car {
+   constructor(x, y,color) {
+     this.x = x;
+     this.y = y;
+    this.color = color;
+     this.speedX = 2;
+   }
+   move() {
+     this.x = this.x + this.speedX;
+     if (this.x > width - 25 || this.x < 25) {
+        this.speedX = this.speedX * -1;}
+   }
+   show() {
+     push();
+     fill(this.color);
+     noStroke();
+     rect(this.x, this.y, 50);
+     pop();
+   }
+     collision (flowerX, flowerY) {
+    let flowerDistance = dist(this.x,this.y, flowerX, flowerY);
+    if (flowerDistance < flowerWidth){
+     return true;} 
+   else{
+    return false;
+   }
+ }
+ }
+// movement of the flower 
+ function keyPressed() {
+   if (keyCode == UP_ARROW) {
+     flowerY -= 5;
+   }
+   if (keyCode == DOWN_ARROW) {
+     flowerY += 5;
+   }
+   if (keyCode == RIGHT_ARROW) {
+     flowerX += 5;
+   }
+   if (keyCode == LEFT_ARROW) {
+     flowerX -= 5;
+   }
+ }
+ // flower function 
+ function addFlower(x, y, size) {
+   push();
+   fill("green");
+   scale(size);
+   rect(x, y, 50);
+   pop();
+ }
